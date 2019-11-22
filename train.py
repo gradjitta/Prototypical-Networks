@@ -12,19 +12,6 @@ from model.protonet_text import ProtoNetText
 from model.protonet_text import ProtoLoss
 from data.load_data import TextGenerator
 
-n_way = 5
-k_shot = 5
-proto_dim = 32
-n_query = 2
-n_meta_test_way = 5
-k_meta_test_shot = 5
-n_meta_test_query = 2
-num_epochs = 20
-num_episodes = 200
-embed_size = 768
-hidden_dim = 100
-
-
 def get_latents(x,y, embed_size, n_way, n_query, k_shot):
     x_support, x_query = x[:,:,:k_shot,:], x[:,:,k_shot:,:]
     y_support, y_query = y[:,:,:k_shot,:], y[:,:,k_shot:,:]
