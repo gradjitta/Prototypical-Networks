@@ -45,7 +45,7 @@ def main(n_way= 5, k_shot = 5, n_query = 2):
     text_vectors = pickle.load(open('data/mini_newsgroup_vectors.pkl','rb'))
     mini_df = pickle.load(open('data/mini_newsgroup_data.pkl','rb'))
     text_generator_ = TextGenerator(mini_df, n_way, k_shot+n_query, n_meta_test_way, k_meta_test_shot+n_meta_test_query)
-    model_text = ProtoNetText(embed_size, hidden_dim)
+    model_text = ProtoNetText(embed_size, hidden_dim, proto_dim)
     optimizer_text = torch.optim.Adam(model_text.parameters(), lr=1e-4)
     criterion = ProtoLoss(n_way, k_shot, n_query, proto_dim)
     for ep in range(num_epochs):

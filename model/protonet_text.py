@@ -6,13 +6,14 @@ import random
 
 
 class ProtoNetText(torch.nn.Module):
-    def __init__(self, embedding_size, hidden_size):
+    def __init__(self, embedding_size, hidden_size, proto_dim):
         super(ProtoNetText, self).__init__()
         self.embed_size = embedding_size
         self.hidden_size = hidden_size
+        self.proto_dim = proto_dim
         self.l1 = torch.nn.Linear(self.embed_size, self.hidden_size)
         self.rep_block =torch.nn.Sequential(*[torch.nn.BatchNorm1d(hidden_size), torch.nn.Linear(self.hidden_size, self.hidden_size)])
-        self.final = torch.nn.Linear(self.hidden_size, 32)
+        self.final = torch.nn.Linear(self.hidden_size, self.proto_dim)
     def forward(self, x):
         return self.final(self.rep_block(self.l1(x)))
     
