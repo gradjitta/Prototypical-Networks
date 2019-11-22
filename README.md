@@ -9,7 +9,8 @@ Prototypical Network in Pytorch for Text
 # Dataset:
 Newsgroup 20 dataset from sklearn.
 - Sampled 30 entities per class to build the `mini_newsgroup_data.pkl`
-- Used `nlp = spacy.load('en_trf_bertbaseuncased_lg')` to extract embeddings and in `mini_newsgroup_vectors.py`
+- Used `nlp = spacy.load('en_trf_bertbaseuncased_lg')` to extract embeddings 
+- Extracted embeddings in `mini_newsgroup_vectors.pkl`
 
 
 ### TODO
