@@ -1,5 +1,7 @@
 # Prototypical-Networks
-Prototypical Network in Pytorch
+Prototypical Network in Pytorch for Text
+
+
 
 *This code repo is experimental and built using CS330 homework material as guide*
 
@@ -10,3 +12,9 @@ Newsgroup 20 dataset from sklearn.
 - Used `nlp = spacy.load('en_trf_bertbaseuncased_lg')` to extract embeddings 
 
 
+### TODO
+
+- [x] Working Prototypical-Network for 20 newsgroup dataset
+- [ ] Clean up code
+- [ ] Add more prototypical networks for text and `example/` folder
+- [ ] ....will add more
