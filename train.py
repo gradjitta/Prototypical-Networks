@@ -8,7 +8,7 @@ import os
 import random
 import fire
 
-from model.protonet_text import ProtoNetText
+from model.protonet_text import ProtoNetText, ProtoDummyNet
 from model.protonet_text import ProtoLoss
 from data.load_data import TextGenerator
 
@@ -20,7 +20,7 @@ def get_latents(x,y, embed_size, n_way, n_query, k_shot):
     query_input_t = torch.Tensor(x_query).view(-1, embed_size)
     return support_input_t, query_input_t, labels_onehot
 
-def main(n_way= 5, k_shot = 5, n_query = 2):
+def main(n_way= 5, k_shot = 5, n_query = 2, train_mode = 'normal'):
     proto_dim = 32
     n_meta_test_way = 5
     k_meta_test_shot = 5
@@ -32,8 +32,12 @@ def main(n_way= 5, k_shot = 5, n_query = 2):
     text_vectors = pickle.load(open('data/mini_newsgroup_vectors.pkl','rb'))
     mini_df = pickle.load(open('data/mini_newsgroup_data.pkl','rb'))
     text_generator_ = TextGenerator(mini_df, n_way, k_shot+n_query, n_meta_test_way, k_meta_test_shot+n_meta_test_query)
-    model_text = ProtoNetText(embed_size, hidden_dim, proto_dim)
-    optimizer_text = torch.optim.Adam(model_text.parameters(), lr=1e-4)
+    if train_mode == 'normal':
+        model_text = ProtoNetText(embed_size, hidden_dim, proto_dim)
+        optimizer_text = torch.optim.Adam(model_text.parameters(), lr=1e-4)
+    else:
+        model_text = ProtoDummyNet()
+        proto_dim = 768
     criterion = ProtoLoss(n_way, k_shot, n_query, proto_dim)
     for ep in range(num_epochs):
         print(f'Epoch: {ep}')
@@ -43,13 +47,16 @@ def main(n_way= 5, k_shot = 5, n_query = 2):
             x_latent = model_text(support_input_t)
             q_latent = model_text(query_input_t)
             # Compute and print loss
-            loss, accuracy = criterion(x_latent, q_latent, torch.tensor(labels_onehot))
-            #if epi % 50 == 0:
-            #    print(f'Epoc {ep}/{num_epochs} Episode {epi}/{num_episodes}, Accuracy: {round(accuracy.item(),3)}, Training Loss: {round(loss.item(),3)}')
-            # Zero gradients, perform a backward pass, and update the weights.
-            optimizer_text.zero_grad()
-            loss.backward()
-            optimizer_text.step()
+            if train_mode == 'normal':
+                loss, _ = criterion(x_latent, q_latent, torch.tensor(labels_onehot))
+                #if epi % 50 == 0:
+                # #    print(f'Epoc {ep}/{num_epochs} Episode {epi}/{num_episodes}, Accuracy: {round(accuracy.item(),3)}, Training Loss: {round(loss.item(),3)}')
+                # # Zero gradients, perform a backward pass, and update the weights.
+                optimizer_text.zero_grad()
+                loss.backward()
+                optimizer_text.step()
+            else:
+                loss, _ = criterion(x_latent, q_latent, torch.tensor(labels_onehot))
             if epi % 50 == 0:
                 with torch.no_grad():
                     valid_x, valid_y = text_generator_.sample_batch('meta_val', 1,text_vectors, shuffle = False)

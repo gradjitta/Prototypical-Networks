@@ -38,7 +38,7 @@ class TextGenerator(object):
         self.dim_output = 32
         self.texts = df['text'].tolist()
         self.labels = df['target'].tolist()
-        self.nlp = spacy.load('en_trf_bertbaseuncased_lg')
+        #self.nlp = spacy.load('en_trf_bertbaseuncased_lg')
         class_list = np.unique(np.array(df['target'].tolist()))
         random.seed(1)
         random.shuffle(class_list)

@@ -4,6 +4,19 @@ import numpy as np
 import os
 import random
 
+class ProtoDummyNet(torch.nn.Module):
+    """
+    :Args:
+        A network to test if prototypical networks helps 
+        or is it just because of BERT embeddings
+    :Output:
+        Outputs the same bert sentence embedding as a latent vector
+    """
+    def __init__(self):
+        super(ProtoDummyNet, self).__init__()
+    def forward(self, x):
+        return x
+
 
 class ProtoNetText(torch.nn.Module):
     def __init__(self, embedding_size, hidden_size, proto_dim):
