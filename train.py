@@ -20,8 +20,7 @@ def get_latents(x,y, embed_size, n_way, n_query, k_shot):
     query_input_t = torch.Tensor(x_query).view(-1, embed_size)
     return support_input_t, query_input_t, labels_onehot
 
-def main(n_way= 5, k_shot = 5, n_query = 2, train_mode = 'normal'):
-    proto_dim = 32
+def main(n_way= 5, k_shot = 5, n_query = 2, proto_dim = 32, train_mode = 'normal'):
     n_meta_test_way = 5
     k_meta_test_shot = 5
     n_meta_test_query = 2
